@@ -1,0 +1,22 @@
+{
+	"name": "microenvi",
+	"version": "1.0.0",
+	"license": "MIT",
+	"main": "index.js",
+	"source": "src/index.js",
+	"scripts": {
+		"static": "micro-dev index.js --i src",
+		"transpile": "microbundle watch -f es -o public/scripts/bundle.js --jsx h"
+	},
+	"dependencies": {
+		"micro": "^9.1.0",
+		"micro-compress": "^1.0.0",
+		"preact": "^8.2.7",
+		"ws": "^4.0.0"
+	},
+	"devDependencies": {
+		"micro-dev": "^2.2.0",
+		"microbundle": "^0.4.0",
+		"prettier": "^1.10.2"
+	}
+}

@@ -1,0 +1,21 @@
+{
+	"short_name": "brushfire",
+	"name": "brushfire",
+	"start_url": "/?utm_source=homescreen",
+	"icons": [
+		{
+			"src": "/images/favicon.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/images/icon.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"background_color": "#ffffff",
+	"theme_color": "#209cee",
+	"display": "standalone",
+	"orientation": "portrait"
+}
