@@ -3,20 +3,21 @@ const path = require('path');
 const mime = require('mime');
 const url = require('url');
 
+const chokidar = require('chokidar');
 const {send} = require('micro');
 const compress = require('micro-compress');
 const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({port: 3301});
+const watcher = chokidar.watch(path.join(__dirname, 'public'));
 
-process.on('SIGUSR2', () => {
-	wss.clients.forEach((client, i) => {
-		if (client.readyState === WebSocket.OPEN) {
-			client.send('reload');
-		}
+watcher.on('change', (path, stats) => {
+	// a better solution would be to debeounce the reload event
+	if (path.endsWith('.map')) return;
+
+	wss.clients.forEach(client => {
+		if (client.readyState === WebSocket.OPEN) client.send('reload');
 	});
-
-	wss.close();
 });
 
 function serve(request, response) {

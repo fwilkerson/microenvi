@@ -5,12 +5,12 @@
 	"main": "index.js",
 	"source": "src/index.js",
 	"scripts": {
-		"start":
-			"concurrently \"npm run server\"  \"npm run transpile\" -c green,cyan -n server,transpile",
-		"server": "micro-dev index.js --i src",
+		"start": "concurrently \"npm run server\"  \"npm run transpile\" -c green,cyan -n server,transpile",
+		"server": "micro",
 		"transpile": "microbundle watch -f es -o public/scripts/bundle.js --jsx h"
 	},
 	"dependencies": {
+		"chokidar": "^2.0.0",
 		"micro": "^9.1.0",
 		"micro-compress": "^1.0.0",
 		"preact": "^8.2.7",
@@ -18,7 +18,6 @@
 	},
 	"devDependencies": {
 		"concurrently": "^3.5.1",
-		"micro-dev": "^2.2.0",
 		"microbundle": "^0.4.0",
 		"prettier": "^1.10.2"
 	}
