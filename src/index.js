@@ -1,6 +1,5 @@
 import {h, render} from 'preact';
 
-import {Index} from './pages';
 import './lib/socket';
 
-render(<Index />, document.querySelector('#root'));
+render(<h2>All the micro</h2>, document.querySelector('#root'));
