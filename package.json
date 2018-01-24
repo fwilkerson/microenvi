@@ -5,7 +5,9 @@
 	"main": "index.js",
 	"source": "src/index.js",
 	"scripts": {
-		"static": "micro-dev index.js --i src",
+		"start":
+			"concurrently \"npm run server\"  \"npm run transpile\" -c green,cyan -n server,transpile",
+		"server": "micro-dev index.js --i src",
 		"transpile": "microbundle watch -f es -o public/scripts/bundle.js --jsx h"
 	},
 	"dependencies": {
@@ -15,6 +17,7 @@
 		"ws": "^4.0.0"
 	},
 	"devDependencies": {
+		"concurrently": "^3.5.1",
 		"micro-dev": "^2.2.0",
 		"microbundle": "^0.4.0",
 		"prettier": "^1.10.2"

@@ -1,6 +1,6 @@
 {
-	"short_name": "brushfire",
-	"name": "brushfire",
+	"short_name": "microenvi",
+	"name": "microenvi",
 	"start_url": "/?utm_source=homescreen",
 	"icons": [
 		{
@@ -15,7 +15,7 @@
 		}
 	],
 	"background_color": "#ffffff",
-	"theme_color": "#209cee",
+	"theme_color": "#ffffff",
 	"display": "standalone",
 	"orientation": "portrait"
 }
