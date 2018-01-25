@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const mime = require('mime');
 const url = require('url');
 
 const chokidar = require('chokidar');
 const {send} = require('micro');
 const compress = require('micro-compress');
 const microbundle = require('microbundle');
+const mime = require('mime-types');
 const WebSocket = require('ws');
 
 const createClientWebSocket = options => `<script>
