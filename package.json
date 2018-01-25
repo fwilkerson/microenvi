@@ -2,8 +2,7 @@
 	"name": "microenvi",
 	"version": "0.0.1",
 	"license": "MIT",
-	"main": "public/scripts/bundle.js",
-	"source": "src/index.js",
+	"main": "index.js",
 	"bin": "./cli.js",
 	"scripts": {},
 	"dependencies": {
