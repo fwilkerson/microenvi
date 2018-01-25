@@ -1,13 +1,11 @@
 {
 	"name": "microenvi",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"license": "MIT",
-	"main": "index.js",
+	"main": "public/scripts/bundle.js",
 	"source": "src/index.js",
 	"scripts": {
-		"start": "concurrently \"npm run server\"  \"npm run transpile\" -c green,cyan -n server,transpile",
-		"server": "micro",
-		"transpile": "microbundle watch -f es -o public/scripts/bundle.js --jsx h"
+		"start": "micro index.js"
 	},
 	"dependencies": {
 		"chokidar": "^2.0.0",
@@ -17,7 +15,6 @@
 		"ws": "^4.0.0"
 	},
 	"devDependencies": {
-		"concurrently": "^3.5.1",
 		"microbundle": "^0.4.0",
 		"prettier": "^1.10.2"
 	}
