@@ -4,14 +4,14 @@
 	"license": "MIT",
 	"main": "public/scripts/bundle.js",
 	"source": "src/index.js",
-	"scripts": {
-		"start": "micro index.js"
-	},
+	"bin": "./cli.js",
+	"scripts": {},
 	"dependencies": {
 		"chokidar": "^2.0.0",
 		"micro": "^9.1.0",
 		"micro-compress": "^1.0.0",
 		"preact": "^8.2.7",
+		"sade": "^1.3.1",
 		"ws": "^4.0.0"
 	},
 	"devDependencies": {

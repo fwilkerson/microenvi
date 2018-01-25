@@ -1,7 +1,5 @@
 import {Component, h, render} from 'preact';
 
-import './lib/socket';
-
 const styles = {
 	center: {textAlign: 'center'},
 	spacing: {margin: '0 1em'},

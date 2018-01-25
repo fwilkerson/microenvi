@@ -9,51 +9,76 @@ const compress = require('micro-compress');
 const microbundle = require('microbundle');
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({port: 3301});
-const watcher = chokidar.watch(path.join(__dirname, 'public'));
+const createClientWebSocket = options => `<script>
+const ws = new WebSocket('ws://localhost:${options.ws}');
 
-wss.on('connection', ws => {
-	ws.on('error', error => {
-		// most likely this means the user manually refreshed the browser
-	});
-});
+ws.onmessage = event => {
+	if (event.data === 'reload') {
+		setTimeout(() => {
+			ws.close();
+			self.location.reload();
+		}, 300);
+	}
+};</script>`;
 
-watcher.on('change', (path, stats) => {
-	// a better solution would be to debeounce the reload event
-	if (path.endsWith('.map')) return;
+function createServe(options) {
+	const clientWebSocket = createClientWebSocket(options);
+	return (request, response) => {
+		const {pathname} = url.parse(request.url);
+		let file = path.join(__dirname, options.dir, pathname);
 
-	wss.clients.forEach(client => {
-		if (client.readyState === WebSocket.OPEN) client.send('reload');
-	});
-});
+		fs.exists(file, exists => {
+			if (!exists) return send(response, 404);
 
-// I'll need to get this info from the user
-microbundle({
-	cwd: __dirname,
-	format: 'es',
-	jsx: 'h',
-	watch: true,
-}).catch(console.error);
-
-function serve(request, response) {
-	const {pathname} = url.parse(request.url);
-	let file = path.join(__dirname, 'public', pathname);
-
-	fs.exists(file, exists => {
-		if (!exists) return send(response, 404);
-
-		if (fs.statSync(file).isDirectory()) {
-			file += '/index.html';
-		}
-
-		fs.readFile(file, (error, data) => {
-			if (error) send(response, 500);
-			else {
-				response.setHeader('content-type', mime.lookup(file));
-				send(response, 200, data);
+			if (fs.statSync(file).isDirectory()) {
+				file += '/index.html';
 			}
+
+			fs.readFile(file, (error, data) => {
+				if (error) send(response, 500);
+				else {
+					if (file.endsWith('index.html')) {
+						const endOfHead = data.indexOf('</head>');
+						data =
+							data.slice(0, endOfHead) +
+							clientWebSocket +
+							data.slice(endOfHead);
+					}
+
+					response.setHeader('content-type', mime.lookup(file));
+					send(response, 200, data);
+				}
+			});
 		});
-	});
+	};
 }
 
-module.exports = compress(serve);
+module.exports = function(options) {
+	const wss = new WebSocket.Server({port: options.ws});
+
+	// chokidar will go away after updating microbundle to emit events
+	const watcher = chokidar.watch(path.join(__dirname, options.dir));
+
+	wss.on('connection', ws => {
+		ws.on('error', error => {
+			// most likely this means the user manually refreshed the browser
+		});
+	});
+
+	watcher.on('change', (path, stats) => {
+		// a better solution would be to debeounce the reload event
+		if (path.endsWith('.map')) return;
+
+		wss.clients.forEach(client => {
+			if (client.readyState === WebSocket.OPEN) client.send('reload');
+		});
+	});
+
+	microbundle({
+		cwd: options.cwd,
+		format: 'es',
+		watch: true,
+	}).catch(console.error);
+
+	return compress(createServe(options));
+};
