@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"license": "MIT",
 	"main": "index.js",
-	"bin": "./cli.js",
+	"bin": "cli.js",
 	"scripts": {},
 	"dependencies": {
 		"chokidar": "^2.0.0",
