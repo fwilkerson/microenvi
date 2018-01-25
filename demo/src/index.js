@@ -20,7 +20,7 @@ class App extends Component {
 	render(props, state) {
 		return (
 			<main style={styles.center}>
-				<h2>A fun micro dev environment</h2>
+				<h2>A fun micro dev environment!</h2>
 
 				<button onClick={this.updateCount(-1)}>−</button>
 				<em style={styles.spacing}>{state.count}</em>

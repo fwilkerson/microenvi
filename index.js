@@ -25,7 +25,7 @@ function createServe(options) {
 	const clientWebSocket = createClientWebSocket(options);
 	return (request, response) => {
 		const {pathname} = url.parse(request.url);
-		let file = path.join(__dirname, options.dir, pathname);
+		let file = path.join(options.cwd, options.dir, pathname);
 
 		fs.exists(file, exists => {
 			if (!exists) return send(response, 404);
@@ -57,7 +57,7 @@ module.exports = function(options) {
 	const wss = new WebSocket.Server({port: options.ws});
 
 	// chokidar will go away after updating microbundle to emit events
-	const watcher = chokidar.watch(path.join(__dirname, options.dir));
+	const watcher = chokidar.watch(path.join(options.cwd, options.dir));
 
 	wss.on('connection', ws => {
 		ws.on('error', error => {
