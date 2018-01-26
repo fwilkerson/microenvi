@@ -1,19 +1,18 @@
 {
-	"name": "microenvi-demo",
+	"name": "muve-quickstart",
 	"version": "1.0.0",
 	"description": "",
-	"main": "public/scripts/bundle.js",
-	"source": "src/index.js",
+	"main": "public/static/bundle.js",
 	"scripts": {
-		"start": "microenvi"
+		"dev": "microenvi"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"preact": "^8.2.7"
+		"muve": "^1.0.2"
 	},
 	"devDependencies": {
-		"microenvi": "0.0.3"
+		"microenvi": "0.0.4"
 	}
 }
