@@ -6,15 +6,9 @@ Transpile & bundle is done with [microbundle](https://github.com/developit/micro
 
 ## Quick start
 
-A simple hello world with microenvi and preact, first let's initialize our project and install some dependencies.
+A simple hello world with microenvi and preact, first let's initialize our project `npm init --yes` then add preact `npm i -S preact` finally add microenvi `npm i -D microenvi`
 
-`npm init --yes`
-<br />
-`npm i -S preact`
-<br />
-`npm i -D microenvi`
-
-Then add the following to your package.json
+Now add the following to your package.json
 
 ```json
 {
@@ -25,7 +19,7 @@ Then add the following to your package.json
 }
 ```
 
-Now create a `public` folder and add the following `index.html` to it.
+Create a `public` folder and add the following `index.html` to it.
 
 ```html
 <!DOCTYPE html>
@@ -53,6 +47,4 @@ import {h, render} from 'preact';
 render(<h2>Hello, Microenvi</h2>, document.getElementById('root'));
 ```
 
-Start your dev environment by running...
-
-`npm run dev`
+Start your dev environment by running... `npm run dev`
