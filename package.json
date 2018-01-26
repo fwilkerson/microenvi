@@ -4,7 +4,11 @@
 	"license": "MIT",
 	"main": "index.js",
 	"bin": "cli.js",
-	"scripts": {},
+	"author": "Frank A. Wilkerson",
+	"repository": "https://github.com/fwilkerson/microenvi.git",
+	"scripts": {
+		"sandbox": "node cli.js --cwd sandbox"
+	},
 	"dependencies": {
 		"chokidar": "^2.0.0",
 		"micro": "^9.1.0",

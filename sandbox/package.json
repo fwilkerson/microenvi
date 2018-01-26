@@ -1,0 +1,15 @@
+{
+  "name": "microenvi-sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "public/bundle.js",
+  "scripts": {
+    "start": "microenvi"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^8.2.7"
+  }
+}

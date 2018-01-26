@@ -5,7 +5,7 @@ const url = require('url');
 const chokidar = require('chokidar');
 const {send} = require('micro');
 const compress = require('micro-compress');
-const microbundle = require('microbundle');
+const microbundle = require('./lib/microbundle');
 const mime = require('mime-types');
 const WebSocket = require('ws');
 
@@ -57,7 +57,7 @@ module.exports = function(options) {
 	const wss = new WebSocket.Server({port: options.ws});
 
 	// chokidar will go away after updating microbundle to emit events
-	const watcher = chokidar.watch(path.join(options.cwd, options.dir));
+	// const watcher = chokidar.watch(path.join(options.cwd, options.dir));
 
 	wss.on('connection', ws => {
 		ws.on('error', error => {
@@ -65,19 +65,30 @@ module.exports = function(options) {
 		});
 	});
 
-	watcher.on('change', (path, stats) => {
-		// a better solution would be to debeounce the reload event
-		if (path.endsWith('.map')) return;
+	// watcher.on('change', (path, stats) => {
+	// 	// a better solution would be to debeounce the reload event
+	// 	if (path.endsWith('.map')) return;
 
-		wss.clients.forEach(client => {
-			if (client.readyState === WebSocket.OPEN) client.send('reload');
-		});
+	// 	wss.clients.forEach(client => {
+	// 		if (client.readyState === WebSocket.OPEN) client.send('reload');
+	// 	});
+	// });
+
+	process.on('event', event => {
+		if (event.code === 'END') {
+			wss.clients.forEach(client => {
+				if (client.readyState === WebSocket.OPEN) {
+					client.send('reload');
+				}
+			});
+		}
 	});
 
 	microbundle({
 		cwd: options.cwd,
 		format: 'es',
 		watch: true,
+		emit: true,
 	}).catch(console.error);
 
 	return compress(createServe(options));
