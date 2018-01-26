@@ -4,12 +4,55 @@ Microenvi is a zero configuration micro development environment. Bundle, serve, 
 
 Transpile & bundle is done with [microbundle](https://github.com/developit/microbundle).
 
-To get started
+## Quick start
 
-`npm i --save-dev microenvi`
+A simple hello world with microenvi and preact, first let's initialize our project and install some dependencies.
 
-#### or
+`npm init --yes`
+<br />
+`npm i -S preact`
+<br />
+`npm i -D microenvi`
 
-`yarn add -D microenvi`
+Then add the following to your package.json
 
-Check out the demo folder for a working example.
+```json
+{
+	"main": "public/static/bundle.js",
+	"scripts": {
+		"dev": "microenvi"
+	}
+}
+```
+
+Now create a `public` folder and add the following `index.html` to it.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Microenvi</title>
+</head>
+
+<body>
+	<div id="root"></div>
+	<script src="static/bundle.m.js"></script>
+</body>
+
+</html>
+```
+
+Finally create a `src` folder and add the following `index.js` to it.
+
+```javascript
+import {h, render} from 'preact';
+
+render(<h2>Hello, Microenvi</h2>, document.getElementById('root'));
+```
+
+Start your dev environment by running...
+
+`npm run dev`
