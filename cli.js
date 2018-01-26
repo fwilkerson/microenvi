@@ -11,7 +11,8 @@ prog
 	.option('--cwd', 'Use an alternative working directory', '.')
 	.option('--dir', 'Specify the directory to watch', 'public')
 	.option('--ws', 'Specify a port for the reload ws', 3301)
-	.option('--port', 'Specify a port', 3000);
+	.option('--port', 'Specify a port', 3000)
+	.option('--open', 'Automaticall open browser', true);
 
 prog
 	.command('watch', '', {default: true})

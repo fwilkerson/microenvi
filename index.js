@@ -6,6 +6,7 @@ const {send} = require('micro');
 const compress = require('micro-compress');
 const microbundle = require('./lib/microbundle');
 const mime = require('mime-types');
+const opn = require('opn');
 const WebSocket = require('ws');
 
 const createClientWebSocket = options => `<script>
@@ -53,21 +54,26 @@ function createServe(options) {
 }
 
 module.exports = function(options) {
+	let firstBuild = true;
 	const wss = new WebSocket.Server({port: options.ws});
 
 	wss.on('connection', ws => {
-		ws.on('error', error => {
-			// most likely this means the user manually refreshed the browser
-		});
+		// most likely this means the user manually refreshed the browser
+		ws.on('error', error => {});
 	});
 
 	process.on('event', event => {
 		if (event.code === 'END') {
-			wss.clients.forEach(client => {
-				if (client.readyState === WebSocket.OPEN) {
-					client.send('reload');
-				}
-			});
+			if (firstBuild && options.open) {
+				firstBuild = false;
+				opn(`http://localhost:${options.port}`).catch(console.error);
+			} else {
+				wss.clients.forEach(client => {
+					if (client.readyState === WebSocket.OPEN) {
+						client.send('reload');
+					}
+				});
+			}
 		}
 	});
 

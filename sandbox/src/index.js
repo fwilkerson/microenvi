@@ -1,3 +1,5 @@
 import {h, render} from 'preact';
 
-render(<h2>update</h2>, document.getElementById('root'));
+import './index.css';
+
+render(<h2>Sandbox!</h2>, document.getElementById('root'));
