@@ -10,7 +10,6 @@
 		"sandbox": "node cli.js --cwd sandbox"
 	},
 	"dependencies": {
-		"chokidar": "^2.0.0",
 		"micro": "^9.1.0",
 		"micro-compress": "^1.0.0",
 		"microbundle": "^0.4.2",

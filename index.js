@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const chokidar = require('chokidar');
 const {send} = require('micro');
 const compress = require('micro-compress');
 const microbundle = require('./lib/microbundle');
@@ -56,23 +55,11 @@ function createServe(options) {
 module.exports = function(options) {
 	const wss = new WebSocket.Server({port: options.ws});
 
-	// chokidar will go away after updating microbundle to emit events
-	// const watcher = chokidar.watch(path.join(options.cwd, options.dir));
-
 	wss.on('connection', ws => {
 		ws.on('error', error => {
 			// most likely this means the user manually refreshed the browser
 		});
 	});
-
-	// watcher.on('change', (path, stats) => {
-	// 	// a better solution would be to debeounce the reload event
-	// 	if (path.endsWith('.map')) return;
-
-	// 	wss.clients.forEach(client => {
-	// 		if (client.readyState === WebSocket.OPEN) client.send('reload');
-	// 	});
-	// });
 
 	process.on('event', event => {
 		if (event.code === 'END') {
