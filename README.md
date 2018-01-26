@@ -6,7 +6,11 @@ Transpile & bundle is done with [microbundle](https://github.com/developit/micro
 
 ## Quick start
 
-A simple hello world with microenvi and preact, first let's initialize our project `npm init --yes` then add preact `npm i -S preact` finally add microenvi `npm i -D microenvi`
+A simple hello world with microenvi and preact;
+
+* first let's initialize our project `npm init --yes`
+* then install preact `npm i -S preact`
+* finally install microenvi `npm i -D microenvi`
 
 Now add the following to your package.json
 
