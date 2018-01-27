@@ -37,7 +37,6 @@ Create a `public` folder and add the following `index.html` to it.
 
 <body>
 	<div id="root"></div>
-	<script src="static/bundle.m.js"></script>
 </body>
 
 </html>

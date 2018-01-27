@@ -9,7 +9,14 @@ const mime = require('mime-types');
 const opn = require('opn');
 const WebSocket = require('ws');
 
-const createClientWebSocket = options => `<script>
+function getPackage(options) {
+	return JSON.parse(
+		fs.readFileSync(path.resolve(options.cwd, 'package.json'), 'utf8')
+	);
+}
+
+const createClientWebSocket = options => `
+<script>
 const ws = new WebSocket('ws://localhost:${options.ws}');
 
 ws.onmessage = event => {
@@ -19,32 +26,68 @@ ws.onmessage = event => {
 			self.location.reload();
 		}, 300);
 	}
-};</script>`;
+};
+</script>`;
+
+const createCssLink = options => {
+	const {dir, pkg} = options;
+	let src = pkg.main.replace(dir + '/', '');
+	src = src.replace('.js', '.css');
+	return `<link rel="stylesheet" href="${src}">`;
+};
+
+const createBundleScriptTag = options => {
+	const {dir, pkg} = options;
+	const src = pkg.main.replace(dir + '/', '');
+	return `<script src="${src}"></script>`;
+};
+
+function buildIndexHtml(options, data) {
+	const endOfHead = data.indexOf('</head>');
+
+	const {bundleScriptTag, clientWebSocket, cssLink, cwd, dir, pkg} = options;
+
+	let cssFile = path.join(cwd, pkg.main.replace('.js', '.css'));
+
+	if (fs.existsSync(cssFile)) {
+		data =
+			data.slice(0, endOfHead) +
+			cssLink +
+			clientWebSocket +
+			data.slice(endOfHead);
+	} else {
+		data = data.slice(0, endOfHead) + clientWebSocket + data.slice(endOfHead);
+	}
+
+	const endOfBody = data.indexOf('</body>');
+
+	data = data.slice(0, endOfBody) + bundleScriptTag + data.slice(endOfBody);
+
+	return data;
+}
 
 function createServe(options) {
-	const clientWebSocket = createClientWebSocket(options);
+	options.cssLink = createCssLink(options);
+	options.clientWebSocket = createClientWebSocket(options);
+	options.bundleScriptTag = createBundleScriptTag(options);
+
 	return (request, response) => {
 		const {pathname} = url.parse(request.url);
 		let file = path.join(options.cwd, options.dir, pathname);
 
 		fs.exists(file, exists => {
-			if (!exists) return send(response, 404);
-
+			if (!exists) {
+				return send(response, 404);
+			}
 			if (fs.statSync(file).isDirectory()) {
 				file += '/index.html';
 			}
-
 			fs.readFile(file, (error, data) => {
 				if (error) send(response, 500);
 				else {
 					if (file.endsWith('index.html')) {
-						const endOfHead = data.indexOf('</head>');
-						data =
-							data.slice(0, endOfHead) +
-							clientWebSocket +
-							data.slice(endOfHead);
+						data = buildIndexHtml(options, data);
 					}
-
 					response.setHeader('content-type', mime.lookup(file));
 					send(response, 200, data);
 				}
@@ -52,6 +95,8 @@ function createServe(options) {
 		});
 	};
 }
+
+process.on('SIGINT', process.exit);
 
 module.exports = function(options) {
 	let firstBuild = true;
@@ -64,8 +109,7 @@ module.exports = function(options) {
 
 	microbundle({
 		cwd: options.cwd,
-		format: 'es',
-		watch: true,
+		format: 'cjs',
 		onBuild(event) {
 			if (firstBuild && options.open) {
 				firstBuild = false;
@@ -78,7 +122,10 @@ module.exports = function(options) {
 				});
 			}
 		},
+		watch: true,
 	}).catch(console.error); // todo communicate errors to client
+
+	options.pkg = getPackage(options);
 
 	return compress(createServe(options));
 };
