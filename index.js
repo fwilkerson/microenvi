@@ -9,38 +9,37 @@ const mime = require('mime-types');
 const opn = require('opn');
 const WebSocket = require('ws');
 
-function getPackage(options) {
-	return JSON.parse(
-		fs.readFileSync(path.resolve(options.cwd, 'package.json'), 'utf8')
-	);
+function createBundleScriptTag({dir, pkg}) {
+	const src = pkg.main.replace(dir + '/', '');
+	return `<script src="${src}"></script>`;
 }
 
-const createClientWebSocket = options => `
-<script>
-const ws = new WebSocket('ws://localhost:${options.ws}');
+function createClientWebSocket(options) {
+	return `
+	<script>
+		const ws = new WebSocket('ws://localhost:${options.ws}');
 
-ws.onmessage = event => {
-	if (event.data === 'reload') {
-		setTimeout(() => {
-			ws.close();
-			self.location.reload();
-		}, 300);
-	}
-};
-</script>`;
+		ws.onmessage = event => {
+			if (event.data === 'reload') {
+				setTimeout(() => {
+					ws.close();
+					self.location.reload();
+				}, 300);
+			}
+		};
+	</script>
+	`;
+}
 
-const createCssLink = options => {
-	const {dir, pkg} = options;
+function createCssLink({dir, pkg}) {
 	let src = pkg.main.replace(dir + '/', '');
 	src = src.replace('.js', '.css');
 	return `<link rel="stylesheet" href="${src}">`;
-};
+}
 
-const createBundleScriptTag = options => {
-	const {dir, pkg} = options;
-	const src = pkg.main.replace(dir + '/', '');
-	return `<script src="${src}"></script>`;
-};
+function getPackage({cwd}) {
+	return JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
+}
 
 function buildIndexHtml(options, data) {
 	const endOfHead = data.indexOf('</head>');
@@ -122,6 +121,7 @@ module.exports = function(options) {
 				});
 			}
 		},
+		target: 'browser',
 		watch: true,
 	}).catch(console.error); // todo communicate errors to client
 
