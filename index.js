@@ -62,8 +62,11 @@ module.exports = function(options) {
 		ws.on('error', error => {});
 	});
 
-	process.on('event', event => {
-		if (event.code === 'END') {
+	microbundle({
+		cwd: options.cwd,
+		format: 'es',
+		watch: true,
+		onBuild(event) {
 			if (firstBuild && options.open) {
 				firstBuild = false;
 				opn(`http://localhost:${options.port}`).catch(console.error);
@@ -74,15 +77,8 @@ module.exports = function(options) {
 					}
 				});
 			}
-		}
-	});
-
-	microbundle({
-		cwd: options.cwd,
-		format: 'es',
-		watch: true,
-		emit: true,
-	}).catch(console.error);
+		},
+	}).catch(console.error); // todo communicate errors to client
 
 	return compress(createServe(options));
 };
