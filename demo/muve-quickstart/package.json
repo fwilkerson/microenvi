@@ -13,6 +13,6 @@
 		"muve": "^1.0.2"
 	},
 	"devDependencies": {
-		"microenvi": "0.0.4"
+		"microenvi": "0.0.5"
 	}
 }

@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "public/scripts/bundle.js",
-	"source": "src/index.js",
 	"scripts": {
 		"dev": "microenvi"
 	},
@@ -14,6 +13,6 @@
 		"preact": "^8.2.7"
 	},
 	"devDependencies": {
-		"microenvi": "0.0.4"
+		"microenvi": "0.0.5"
 	}
 }

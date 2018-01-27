@@ -1,5 +1,7 @@
 import muve, {h, interact} from 'muve';
 
+import './index.css';
+
 // MODEL
 const init = {};
 
