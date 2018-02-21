@@ -3,11 +3,13 @@ const path = require('path');
 const url = require('url');
 
 const {send} = require('micro');
+const microbundle = require('microbundle');
 const compress = require('micro-compress');
-const microbundle = require('./lib/microbundle');
 const mime = require('mime-types');
 const opn = require('opn');
 const WebSocket = require('ws');
+
+const notFound = `<h2 style=text-align:center;margin-top:2em;font-family:sans-serif;font-weight:400>404 <span style=font-size:larger>|</span> Not Found</h2>`;
 
 function createBundleScriptTag({dir, pkg}) {
 	const src = pkg.main.replace(dir + '/', '');
@@ -18,7 +20,6 @@ function createClientWebSocket(options) {
 	return `
 	<script>
 		const ws = new WebSocket('ws://localhost:${options.ws}');
-
 		ws.onmessage = event => {
 			if (event.data === 'reload') {
 				setTimeout(() => {
@@ -28,7 +29,7 @@ function createClientWebSocket(options) {
 			}
 		};
 	</script>
-	`;
+	`.replace(/\t|\n/g, '');
 }
 
 function createCssLink({dir, pkg}) {
@@ -42,11 +43,17 @@ function getPackage({cwd}) {
 }
 
 function buildIndexHtml(options, data) {
+	if (options.single) {
+		const startOfHead = data.indexOf('<head>');
+		data =
+			data.slice(0, startOfHead) + `<base href="/">` + data.slice(startOfHead);
+	}
+
 	const endOfHead = data.indexOf('</head>');
 
-	const {bundleScriptTag, clientWebSocket, cssLink, cwd, dir, pkg} = options;
+	const {bundleScriptTag, clientWebSocket, cssLink, cwd, pkg} = options;
 
-	let cssFile = path.join(cwd, pkg.main.replace('.js', '.css'));
+	const cssFile = path.join(cwd, pkg.main.replace('.js', '.css'));
 
 	if (fs.existsSync(cssFile)) {
 		data =
@@ -76,7 +83,12 @@ function createServe(options) {
 
 		fs.exists(file, exists => {
 			if (!exists) {
-				return send(response, 404);
+				if (options.single) {
+					file = path.join(options.cwd, options.dir, '/');
+				} else {
+					response.setHeader('content-type', mime.lookup('.html'));
+					return send(response, 404, notFound);
+				}
 			}
 			if (fs.statSync(file).isDirectory()) {
 				file += '/index.html';
@@ -102,14 +114,14 @@ module.exports = function(options) {
 	const wss = new WebSocket.Server({port: options.ws});
 
 	wss.on('connection', ws => {
-		// most likely this means the user manually refreshed the browser
-		ws.on('error', error => {});
+		// Most likely this means the user manually refreshed the browser
+		ws.on('error', () => {});
 	});
 
 	microbundle({
 		cwd: options.cwd,
 		format: 'cjs',
-		onBuild(event) {
+		onBuild() {
 			if (firstBuild && options.open) {
 				firstBuild = false;
 				opn(`http://localhost:${options.port}`).catch(console.error);
@@ -123,7 +135,7 @@ module.exports = function(options) {
 		},
 		target: 'browser',
 		watch: true,
-	}).catch(console.error); // todo communicate errors to client
+	}).catch(console.error);
 
 	options.pkg = getPackage(options);
 
