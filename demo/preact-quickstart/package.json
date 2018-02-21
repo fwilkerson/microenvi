@@ -13,6 +13,6 @@
 		"preact": "^8.2.7"
 	},
 	"devDependencies": {
-		"microenvi": "0.0.5"
+		"microenvi": "^0.1.0"
 	}
 }
