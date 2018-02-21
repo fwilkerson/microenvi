@@ -51,3 +51,23 @@ render(<h2>Hello, Microenvi</h2>, document.getElementById('root'));
 ```
 
 Start your dev environment by running... `npm run dev`
+
+## CLI Options
+
+```
+  Usage
+    $ microenvi [options]
+
+  For more info, run any command with the `--help` flag
+    $ microenvi --help
+
+  Options
+    -v, --version    Displays current version
+    --cwd            Use an alternative working directory  (default .)
+    --dir            Specify the directory to watch  (default public)
+    --ws             Specify a port for the reload ws  (default 3301)
+    --port           Specify a port  (default 3000)
+    --open           Automatically open browser  (default true)
+    --single         Serve single page app  (default false)
+    -h, --help       Displays this message
+```

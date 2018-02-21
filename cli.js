@@ -12,7 +12,7 @@ prog
 	.option('--dir', 'Specify the directory to watch', 'public')
 	.option('--ws', 'Specify a port for the reload ws', 3301)
 	.option('--port', 'Specify a port', 3000)
-	.option('--open', 'Automaticall open browser', true)
+	.option('--open', 'Automatically open browser', true)
 	.option('--single', 'Serve single page app', false);
 
 prog
