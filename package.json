@@ -8,7 +8,7 @@
 	"repository": "https://github.com/fwilkerson/microenvi.git",
 	"scripts": {
 		"prepare": "xo",
-		"sandbox": "node cli.js --cwd sandbox --single --jsx"
+		"sandbox": "node cli.js --cwd sandbox --single"
 	},
 	"dependencies": {
 		"micro": "^9.1.0",
