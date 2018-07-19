@@ -10,9 +10,9 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"preact": "^8.2.7"
+		"preact": "^8.2.9"
 	},
 	"devDependencies": {
-		"microenvi": "^0.1.0"
+		"microenvi": "^0.2.0"
 	}
 }

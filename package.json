@@ -26,6 +26,9 @@
 	},
 	"xo": {
 		"extends": "prettier",
-		"ignores": ["demo/**", "sandbox/**"]
+		"ignores": [
+			"demo/**",
+			"sandbox/**"
+		]
 	}
 }
