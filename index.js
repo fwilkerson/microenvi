@@ -13,7 +13,7 @@ const notFound = `<h2 style=text-align:center;margin-top:2em;font-family:sans-se
 
 function createBundleScriptTag({dir, pkg}) {
 	const src = pkg.main.replace(dir + '/', '');
-	return `<script src="${src}"></script>`;
+	return `<script src="${src}" type="module"></script>`;
 }
 
 function createClientWebSocket(options) {
@@ -81,28 +81,32 @@ function createServe(options) {
 		const {pathname} = url.parse(request.url);
 		let file = path.join(options.cwd, options.dir, pathname);
 
-		fs.exists(file, exists => {
-			if (!exists) {
-				if (options.single) {
-					file = path.join(options.cwd, options.dir, '/');
-				} else {
-					response.setHeader('content-type', mime.lookup('.html'));
-					return send(response, 404, notFound);
-				}
-			}
+		try {
 			if (fs.statSync(file).isDirectory()) {
 				file += '/index.html';
 			}
-			fs.readFile(file, (error, data) => {
-				if (error) send(response, 500);
-				else {
-					if (file.endsWith('index.html')) {
-						data = buildIndexHtml(options, data);
-					}
-					response.setHeader('content-type', mime.lookup(file));
-					send(response, 200, data);
-				}
-			});
+		} catch (err) {
+			if (!options.single) {
+				response.setHeader('content-type', mime.lookup('.html'));
+				send(response, 404, notFound);
+				return;
+			}
+
+			file = path.join(options.cwd, options.dir, '/index.html');
+		}
+
+		fs.readFile(file, (err, data) => {
+			if (err) {
+				send(response, 500);
+				return;
+			}
+
+			if (file.endsWith('index.html')) {
+				data = buildIndexHtml(options, data);
+			}
+
+			response.setHeader('content-type', mime.lookup(file));
+			send(response, 200, data);
 		});
 	};
 }
@@ -120,7 +124,8 @@ module.exports = function(options) {
 
 	microbundle({
 		cwd: options.cwd,
-		format: 'cjs',
+		external: options.external,
+		format: 'esm',
 		onBuild() {
 			if (firstBuild && options.open) {
 				firstBuild = false;

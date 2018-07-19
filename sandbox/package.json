@@ -10,6 +10,6 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"preact": "^8.2.7"
+		"preact": "^8.2.9"
 	}
 }
