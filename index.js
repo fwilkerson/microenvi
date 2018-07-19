@@ -126,6 +126,7 @@ module.exports = function(options) {
 		cwd: options.cwd,
 		external: options.external,
 		format: 'esm',
+		jsx: true,
 		onBuild() {
 			if (firstBuild && options.open) {
 				firstBuild = false;

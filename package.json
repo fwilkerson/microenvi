@@ -8,7 +8,7 @@
 	"repository": "https://github.com/fwilkerson/microenvi.git",
 	"scripts": {
 		"prepare": "xo",
-		"sandbox": "node cli.js --cwd sandbox --single"
+		"sandbox": "node cli.js --cwd sandbox --single --jsx"
 	},
 	"dependencies": {
 		"micro": "^9.1.0",
@@ -26,9 +26,6 @@
 	},
 	"xo": {
 		"extends": "prettier",
-		"ignores": [
-			"demo/**",
-			"sandbox/**"
-		]
+		"ignores": ["demo/**", "sandbox/**"]
 	}
 }
