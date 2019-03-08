@@ -34,7 +34,7 @@ function createClientWebSocket(options) {
 
 function createCssLink({dir, pkg}) {
 	let src = pkg.main.replace(dir + '/', '');
-	src = src.replace('.js', '.css');
+	src = src.replace('.mjs', '.css');
 	return `<link rel="stylesheet" href="${src}">`;
 }
 
@@ -78,6 +78,7 @@ function createServe(options) {
 	options.bundleScriptTag = createBundleScriptTag(options);
 
 	return (request, response) => {
+		// eslint-disable-next-line node/no-deprecated-api
 		const {pathname} = url.parse(request.url);
 		let file = path.join(options.cwd, options.dir, pathname);
 
@@ -85,7 +86,7 @@ function createServe(options) {
 			if (fs.statSync(file).isDirectory()) {
 				file += '/index.html';
 			}
-		} catch (err) {
+		} catch (error) {
 			if (!options.single) {
 				response.setHeader('content-type', mime.lookup('.html'));
 				send(response, 404, notFound);
@@ -125,7 +126,9 @@ module.exports = function(options) {
 	microbundle({
 		cwd: options.cwd,
 		external: options.external,
-		format: 'esm',
+		format: 'es',
+		globals: options.globals,
+		jsx: options.jsx,
 		onBuild() {
 			if (firstBuild && options.open) {
 				firstBuild = false;

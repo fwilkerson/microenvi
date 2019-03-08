@@ -2,7 +2,7 @@
 	"name": "muve-quickstart",
 	"version": "1.0.0",
 	"description": "",
-	"main": "public/static/bundle.js",
+	"main": "public/static/bundle.mjs",
 	"scripts": {
 		"dev": "microenvi"
 	},
@@ -13,6 +13,6 @@
 		"muve": "^1.0.2"
 	},
 	"devDependencies": {
-		"microenvi": "^0.2.0"
+		"microenvi": "^0.3.0"
 	}
 }

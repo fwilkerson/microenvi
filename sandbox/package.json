@@ -2,7 +2,7 @@
 	"name": "microenvi-sandbox",
 	"version": "1.0.0",
 	"description": "",
-	"main": "public/static/bundle.js",
+	"main": "public/static/bundle.mjs",
 	"scripts": {
 		"start": "microenvi"
 	},
@@ -10,6 +10,6 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"preact": "^8.2.9"
+		"preact": "^8.4.2"
 	}
 }

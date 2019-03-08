@@ -2,7 +2,7 @@
 	"name": "preact-quickstart",
 	"version": "1.0.0",
 	"description": "",
-	"main": "public/scripts/bundle.js",
+	"main": "public/scripts/bundle.mjs",
 	"scripts": {
 		"dev": "microenvi"
 	},
@@ -10,9 +10,9 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"preact": "^8.2.9"
+		"preact": "^8.4.2"
 	},
 	"devDependencies": {
-		"microenvi": "^0.2.0"
+		"microenvi": "^0.3.0"
 	}
 }
