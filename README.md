@@ -69,9 +69,19 @@ Start your dev environment by running... `npm run dev`
     --external       Specify external dependencies  (default none)
     --globals        Specify global dependencies  (default none)
     --jsx            A custom JSX pragma like React.createElement  (default h)
+    --define         Inline constants  (default none)
+    --alias          Remap imports from one module to another  (default none)
     --open           Automatically open browser  (default true)
     --port           Specify a port  (default 3000)
     --single         Serve single page app  (default false)
     --ws             Specify a port for the reload ws  (default 3301)
     -h, --help       Displays this message
+```
+
+The syntax for `--define` and `--alias` are as follows:
+
+```bash
+$ microenvi --define process.env.NODE_ENV=production,NUM=123,BOOL=true
+# and
+$ microenvi --alias react=preact-compat,react-dom=preact-compat
 ```

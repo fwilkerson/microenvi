@@ -129,6 +129,8 @@ module.exports = function(options) {
 		format: 'es',
 		globals: options.globals,
 		jsx: options.jsx,
+		define: options.define,
+		alias: options.alias,
 		onBuild() {
 			if (firstBuild && options.open) {
 				firstBuild = false;
