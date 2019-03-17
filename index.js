@@ -130,6 +130,7 @@ module.exports = function(options) {
 		globals: options.globals,
 		jsx: options.jsx,
 		define: options.define,
+		alias: options.alias,
 		onBuild() {
 			if (firstBuild && options.open) {
 				firstBuild = false;
