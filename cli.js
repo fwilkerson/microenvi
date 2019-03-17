@@ -13,7 +13,7 @@ prog
 	.option('--external', 'Specify external dependencies', 'none')
 	.option('--globals', 'Specify global dependencies', 'none')
 	.option('--jsx', 'A custom JSX pragma like React.createElement', 'h')
-	.option('--define', 'Inline constants', 'none')
+	.option('--define', 'Inline constants')
 	.option('--alias', 'Remap imports from one module to another', 'none')
 	.option('--open', 'Automatically open browser', true)
 	.option('--port', 'Specify a port', 3000)
